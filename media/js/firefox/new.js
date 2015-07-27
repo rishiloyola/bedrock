@@ -112,11 +112,6 @@
             state = 'Desktop, Firefox not up-to-date';
         }
     }
-    //GA Custom Dimension in Pageview
-    window.dataLayer.push({
-        event: 'set-state',
-        state: state
-    });
 
     // conditions in which scene2 should not be shown, even when the
     // #download-fx hash is set
@@ -233,6 +228,7 @@
                 // stop in a half-animated state.
                 window.setTimeout(
                     function() {
+
                         window.dataLayer.push({
                             event: 'virtual-pageview',
                             virtualUrl: virtual_url
@@ -250,6 +246,7 @@
                 // popup must go before tracking to prevent timeouts that
                 // cause the security blocker.
                 window.open(url, 'download_window', 'toolbar=0,location=no,directories=0,status=0,scrollbars=0,resizeable=0,width=1,height=1,top=0,left=0');
+
                 window.dataLayer.push({
                     event: 'virtual-pageview',
                     virtualUrl: virtual_url

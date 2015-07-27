@@ -23,14 +23,7 @@
                 fxaFrameTarget.postMessage(e.data, fxaIframeSrc);
                 fxaHandshake = true;
                 break;
-            // just GA tracking when iframe loads
-            case 'loaded':
-                window.dataLayer.push({
-                    'event': 'firstrun-fxa',
-                    'interaction': 'fxa-loaded'
-                });
 
-                break;
             // resize container when iframe resizes for nicer UI
             case 'resize':
                 clearTimeout(resizeTimer);
@@ -40,30 +33,7 @@
                 }, 300);
 
                 break;
-            // track when user signs up successfully (but hasn't yet verified email)
-            case 'signup_must_verify':
-                window.dataLayer.push({
-                    'event': 'firstrun-fxa',
-                    'interaction': 'fxa-signup'
-                });
 
-                break;
-            // track when user returns to page after verifying email (may never happen)
-            case 'verification_complete':
-                window.dataLayer.push({
-                    'event': 'firstrun-fxa',
-                    'interaction': 'fxa-verified'
-                });
-
-                break;
-            // track user with FxA account logging in (very rare for firstrun)
-            case 'login':
-                window.dataLayer.push({
-                    'event': 'firstrun-fxa',
-                    'interaction': 'fxa-login'
-                });
-
-                break;
             }
         }
     }, true);

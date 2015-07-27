@@ -30,11 +30,6 @@ $(function() {
 
         $origin.addClass('modal-origin');
 
-        window.dataLayer.push({
-            event: 'manifesto-interaction',
-            browserAction: action,
-            section: section_id.match(/\d+/)[0]
-        });
     };
 
     // Set up the modal
@@ -57,16 +52,30 @@ $(function() {
                         .text(window.trans('principle-nav-prev')).appendTo($nav);
 
                     $nav.on('click', 'button', function () {
-                        nav_modal($(this).hasClass('prev') ? -1 : 1);
-                    });
 
-                    window.dataLayer.push({
-                        event: 'manifesto-interaction',
-                        browserAction: 'modal open',
-                        section: section_id.match(/\d+/)[0]
+                        var quoteText = $('.principle.overlay-contents h3').text();
+                        // Track arrow clicks on Manifesto quote popup
+
+                        window.dataLayer.push({
+                            event: 'manifesto-quote-click-arrow',
+                            direction: ($(this).attr('class') === 'prev') ? 'previous' : 'next',
+                            quote: quoteText.slice(3),
+                            quoteNumber: Number(quoteText.slice(0, 2))
+                        });
+
+                        nav_modal($(this).hasClass('prev') ? -1 : 1);
                     });
                 }
             });
+
+            // Track Manifesto quote clicks
+
+            window.dataLayer.push({
+                event: 'manifesto-quote-click',
+                quote: $(this).find('h3').text().slice(3),
+                section: Number(section_id.match(/\d+/)[0])
+            });
+
         }).on('keydown', function (event) {
             if (event.keyCode === 13) {
                 $this.trigger('click');
@@ -106,10 +115,10 @@ $(function() {
     // https://dev.twitter.com/docs/intents
     var open_twitter_subwin = function (section, url) {
 
+
         window.dataLayer.push({
-            event: 'manifesto-interaction',
-            browserAction: 'tweet',
-            section: section
+            event: 'manifesto-quote-share',
+            quote: $('.principle.overlay-contents h3').text().slice(3)
         });
 
         // Check if the official Twitter widget is activated. If so, we don't
@@ -152,11 +161,6 @@ $(function() {
             action = href.match(/youtube/) ? 'modal video link click'
                                            : 'modal link click';
 
-            window.dataLayer.push({
-                event: 'manifesto-interaction',
-                browserAction: action,
-                section: section + ': ' + $this.text()
-            });
         }
     });
 

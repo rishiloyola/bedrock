@@ -63,12 +63,6 @@
                         state = 'Firefox 31 or Higher: Signed-Out';
                     }
 
-                    // Call GA tracking here to ensure it waits for the
-                    // getConfiguration async call
-                    window.dataLayer.push({
-                        event: 'page-load',
-                        browser: state
-                    });
                 });
 
             // Variation #3: Firefox 29 or 30
@@ -88,15 +82,6 @@
     } else {
         swapState('state-not-fx');
         state = 'Not Firefox';
-    }
-
-    // Send page state to GA if it hasn't already been sent in the
-    // getConfiguration callback
-    if (syncCapable === false) {
-        window.dataLayer.push({
-            event: 'page-load',
-            browser: state
-        });
     }
 
     // Setup GA tracking for Firefox download button
@@ -126,6 +111,12 @@
     // Firefox Sync sign in flow button
     $('#cta-sync').on('click', function(e) {
         e.preventDefault();
+
+        dataLayer.push({
+            event: 'sync-click',
+            browser: state
+        });
+
         Mozilla.UITour.showFirefoxAccounts();
     });
 })(window.jQuery, window.Mozilla);

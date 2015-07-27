@@ -181,8 +181,9 @@ if (typeof Mozilla == 'undefined') {
 
         this.hideAnnotations();
         if (this.tourHasStarted) {
+
             window.dataLayer.push({
-                event: 'firstrun-tour-interaction',
+                event: 'first-run-tour',
                 interaction: 'click',
                 browserAction: 'Close tour'
             });

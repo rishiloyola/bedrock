@@ -102,17 +102,17 @@
         }
         if (!$facesVid[0].paused) { // If the video is not paused
             $facesVid[0].pause();
+
             window.dataLayer.push({
-                event: 'video-interaction',
-                interaction: 'pause',
+                event: 'video-pause',
                 videoTitle: 'Get Involved'
             });
             paused = true;
         } else if ($caption.is(':hidden') && $facesVid[0].paused) { // If the video is paused and caption is hidden
             $facesVid[0].play();
+
             window.dataLayer.push({
-                event: 'video-interaction',
-                interaction: 'play',
+                event: 'video-play',
                 videoTitle: 'Get Involved'
             });
             paused = false;
@@ -124,19 +124,6 @@
         } else {
             $(this).blur().attr('class', 'btn-pause').text(window.trans('button-pause'));
         }
-    });
-
-    // Track interest form submissions
-    $('#help-form').on('submit', function(e) {
-        e.preventDefault();
-        var $form = $(this);
-        $form.unbind('submit');
-        window.dataLayer.push({
-            event: 'contribute-page-interaction',
-            location: 'Want to Help Form - Area of Interest',
-            browserAction: $('#id_contribute-interest')[0].value
-        });
-        $form.submit();
     });
 
     // Track opportunity links

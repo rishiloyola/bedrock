@@ -13,7 +13,11 @@ $(function () {
         $('#landing .section').waypoint(function(direction) {
             if (direction === 'down') {
                 var sectionclass = $(this).prop('class');
-                window.dataLayer.push({event: 'scroll-tracking', section: sectionclass});
+
+                window.dataLayer.push({
+                    event: 'scroll-section',
+                    section: sectionclass
+                });
             }
         }, { offset: '100%' });
 
@@ -30,16 +34,6 @@ $(function () {
             });
         });
     }
-
-    // Track video plays
-    $('a.video-play').on('click', function() {
-        var linktype = $(this).data('linktype');
-        window.dataLayer.push({
-            event: 'contribute-landing-interactions',
-            browserAction: 'Video Interactions',
-            location: linktype
-        });
-    });
 
     // Track Mozillian story clicks on the landing page
     $('.landing-stories .person .url').each(function() {
@@ -106,7 +100,8 @@ $(function () {
     });
 
     // Track event links in the list
-    $('.events-table .event-name a').attr('data-link-type', 'event');
+
+    $('.events-table .event-name a').attr('data-link-type', 'community event');
 
     // Track event links in the footer
     $('.contrib-extra .event-link').attr('data-element-location', 'bottom');
@@ -121,28 +116,16 @@ $(function () {
     $('.extra-links a').attr('data-element-location', 'bottom');
 
     // Track category clicks on the signup page
+
     $('.option input').on('change', function() {
-        var category = this.value;
-        $('#inquiry-form').attr('data-contribute-category', category);
         window.dataLayer.push({
             event: 'contribute-signup-interaction',
-            interaction: 'Category',
             contributeCategory: this.value
         });
     });
 
-    // Track category area selections
-    $('.area select').on('change', function() {
-        var area = this.value;
-        $('#inquiry-form').attr('data-contribute-area', area);
-        window.dataLayer.push({
-            event: 'contribute-signup-interaction',
-            interaction: 'Area',
-            contributeArea: area
-        });
-    });
-
     // Track signup form submissions
+
     $('#inquiry-form').on('submit', function(e) {
         e.preventDefault();
         var newsletterstate;
@@ -154,9 +137,18 @@ $(function () {
 
         $(this).off('submit');
 
+        var selectedArea;
+        $('.area').each(function() {
+            if($(this).css('display') === 'block') {
+                selectedArea = $(this).find('select option:selected').text();
+            }
+        });
+
         window.dataLayer.push({
-            event: 'contribute-submit',
-            newsletterSignup: newsletterstate
+            event: 'contribute-signup-submit',
+            contributeArea: selectedArea,
+            countrySelected: $('#id_country option:selected').text()
+
         });
 
         $(this).submit();

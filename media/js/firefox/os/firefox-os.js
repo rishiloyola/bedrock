@@ -34,12 +34,6 @@
             title: '<img src="' + modalLogo + '" alt="Firefox OS" />'
         });
 
-        //track GA event for newsletter CTA
-        window.dataLayer.push({
-            event: 'fxos-consumer',
-            interaction: 'click',
-            location: 'Sign Me Up - Primary'
-        });
     });
 
     $('#sign-up-form-close').on('click', function() {
@@ -61,12 +55,6 @@
             title: '<img src="' + modalLogo + '" alt="Firefox OS" />'
         });
 
-        //track GA event for get a phone CTA
-        window.dataLayer.push({
-            event: 'fxos-consumer',
-            interaction: 'click',
-            location: 'Get a Phone'
-        });
     });
 
     $appGroupSelector.on('click', 'a', function(event) {

@@ -114,12 +114,6 @@
 
             window.location.hash = $this.attr('href').replace('#', '');
 
-            // GA tracking
-            window.dataLayer.push({
-                event: 'tips-interaction',
-                interaction: 'tab clicks to',
-                browserAction: $this.attr('href')
-            });
         });
 
         // handle next/prev nav clicks
@@ -137,13 +131,6 @@
                 }
 
                 window.location.hash = pager.currentPage.id.replace('-tip', '');
-                // GA tracking
-                var gaAction = (isPrev) ? 'prev link to' : 'next link to';
-                window.dataLayer.push({
-                    event: 'tips-interaction',
-                    interaction: gaAction,
-                    browserAction: '#' + pager.currentPage.id
-                });
             }
         });
 
@@ -160,18 +147,6 @@
             }
 
             window.location.hash = pager.currentPage.id.replace('-tip', '');
-        });
-
-        // GA tracking
-        $('.share-button').on('click', function() {
-            // determine position
-            var pos = ($(this).closest('.button-wrapper').prop('id') === 'main-nav-wrapper') ? 'top' : 'bottom';
-
-            window.dataLayer.push({
-                event: 'tips-interaction',
-                interaction: 'Social Share',
-                browserAction: 'share drop-down ' + pos
-            });
         });
 
         $('a[rel="external"]').attr({'data-interaction': 'outbound link'});

@@ -57,18 +57,18 @@ function onYouTubeIframeAPIReady() {
 
             function onPlayerReady(event) {
                 event.target.playVideo();
+
                 window.dataLayer.push({
-                    event: 'video-interaction',
-                    interaction: 'play',
+                    event: 'video-play',
                     videoTitle: videoTitle
                 });
             }
 
             function onPlayerStateChange(event) {
                 if (event.data === YT.PlayerState.ENDED) {
+
                     window.dataLayer.push({
-                        event: 'video-interaction',
-                        interaction: 'finish',
+                        event: 'video-complete',
                         videoTitle: videoTitle
                     });
                 }
@@ -149,13 +149,11 @@ function onYouTubeIframeAPIReady() {
     // close tour and track button click
     function devToolsDoorhangerClose() {
         showReminderDoorhanger();
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Developer Tools doorhanger - button click', browserAction: 'Close Tour'});
     }
 
     // show webIDE doorhanger and track button click
     function nextWebIDEButton() {
         showWebIDEDoorhanger();
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Developer Tools doorhanger - button click', browserAction: 'Next:WebIDE'});
     }
 
     // shows the WebIDE doorhanger step
@@ -207,15 +205,11 @@ function onYouTubeIframeAPIReady() {
 
     function webIDEDoorhangerClose() {
         showReminderDoorhanger();
-
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Try WebIDE doorhanger - link click', browserAction: 'Close Tour'});
     }
 
     // show webIDE doorhanger and track button click
     function nextSyncButton() {
         showSyncDoorhanger();
-
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Try WebIDE doorhanger - button click', browserAction: 'Next:Sync'});
     }
 
     // shows the Sync doorhanger step
@@ -254,7 +248,6 @@ function onYouTubeIframeAPIReady() {
 
     function syncDoorhangerClose() {
         showReminderDoorhanger();
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Sync doorhanger - link click', browserAction: 'No Thanks'});
     }
 
     // highlights sync sign in button in the app menu
@@ -267,7 +260,6 @@ function onYouTubeIframeAPIReady() {
         });
 
         current = TARGET_4;
-        window.dataLayer.push({event: 'dev-firstrun-tour', interaction: 'Sync doorhanger - button click', browserAction: 'Sync My Firefox'});
     }
 
     function showReminderDoorhanger() {

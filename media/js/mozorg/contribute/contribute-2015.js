@@ -69,19 +69,9 @@
                 if ($more.is(':visible')) {
                     $toggle_button.addClass('open').text(window.trans('less'));
                     $(this).removeAttr('aria-hidden');
-                    window.dataLayer.push({
-                        event: 'mozillian-stories-interaction',
-                        browserAction: person + ' - more',
-                        location: 'main'
-                    });
                 } else {
                     $toggle_button.removeClass('open').text(window.trans('more'));
                     $(this).attr('aria-hidden', 'true');
-                    window.dataLayer.push({
-                        event: 'mozillian-stories-interaction',
-                        browserAction: person + ' - less',
-                        location: 'main'
-                    });
                 }
             });
         });
@@ -109,12 +99,6 @@
             setTimeout(function() {
                 $video[0].play();
             }, 400);
-            // Track when the video ends
-            $video.on('ended', function() {
-                window.dataLayer.push({
-                    event: 'contribute-video-ended'
-                });
-            });
         }
     };
 
@@ -246,11 +230,6 @@
         // Get the target element's ID from the link's href.
         var target = $(this).attr('href').replace( /.*?(#.*)/g, "$1" );
         $('<div class="tooltip arrow-top">'+ $(target + ' p').text() +'</div>').insertAfter($this).fadeIn('fast');
-        // Track tooltips
-        window.dataLayer.push({
-            event: 'contribute-tooltip-interaction',
-            location: $(target).prop('id')
-        });
     });
 
     $tooltips.on('mouseleave blur', function() {

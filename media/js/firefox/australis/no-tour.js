@@ -16,12 +16,6 @@
                 visible = 'NO';
             }
 
-            // Push custom GA variable to track Sync visibility
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                event: 'tour-visiblity',
-                syncVisibility: visible
-            });
         });
     }
 

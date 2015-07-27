@@ -23,18 +23,18 @@
         'onPlay': function() {
             Mozilla.FirefoxAnniversaryVideo.playEmbed();
             Mozilla.FirefoxAnniversaryVideo.setFooterButton('share');
+
             window.dataLayer.push({
-                event: 'video-interaction',
-                interaction: 'click to play',
+                event: 'video-play',
                 videoTitle: '10th Anniversary'
             });
         },
         'onComplete': function() {
             Mozilla.FirefoxAnniversaryVideo.setOverlayButtons('replay');
             Mozilla.FirefoxAnniversaryVideo.hideEmbed();
+
             window.dataLayer.push({
-                event: 'video-interaction',
-                interaction: 'Finish',
+                event: 'video-complete',
                 videoTitle: '10th Anniversary'
             });
         }
@@ -43,11 +43,6 @@
     // Autoplay if URL includes the proper hash and client is not a known mobile OS
     if (window.location.href.indexOf('#play') > -1 && !$html.hasClass('android') && !$html.hasClass('ios') && !$html.hasClass('fxos')) {
         Mozilla.FirefoxAnniversaryVideo.playEmbed();
-        window.dataLayer.push({
-            event: 'video-interaction',
-            interaction: 'autoplay',
-            videoTitle: '10th Anniversary'
-        });
     }
 
 })(window.jQuery);

@@ -5,16 +5,6 @@
 
     var firstTime = 'True';
 
-    // GA tracking for Firstrun tests
-    // https://bugzilla.mozilla.org/show_bug.cgi?id=1128726
-    // should be removed after 2/24/2015
-    if (window.location.search.indexOf('f=34') > -1) {
-        window.dataLayer.push({
-            event: 'firstrun-optimization',
-            testVaration: 'variation 1'
-        });
-    }
-
     //Only run the tour if user is on Firefox 29 for desktop.
     if (window.isFirefox() && !window.isFirefoxMobile() && window.getFirefoxMasterVersion() >= 29) {
 
@@ -40,11 +30,6 @@
                 visible = 'NO';
             }
 
-            // Push custom GA variable to track Sync visibility
-            window.dataLayer.push({
-                event: 'set-sync-visibility',
-                syncVisibility: visible
-            });
         });
 
         //track if this is the first time a user has seen any tour (firstrun or whatsnew)
@@ -56,9 +41,8 @@
             }
 
             window.dataLayer.push({
-                'event': 'firstrun-tour-view',
-                'interaction': 'First Time Seeing Tour',
-                'browserAction': firstTime
+                'event': 'first-run',
+                'isFirstRun': firstTime
             });
         } catch (e) {}
 
@@ -74,17 +58,9 @@
                 if (selectedEngineID === 'yahoo') {
                     Mozilla.UITour.setTreatmentTag('srch-chg-treatment', 'firstrun_yahooDefault');
                     Mozilla.UITour.setTreatmentTag('srch-chg-action', 'ViewPage');
-                    window.dataLayer.push({
-                        event: 'search-change-interaction',
-                        searchEngine: 'yahooDefault'
-                    });
                 } else {
                     Mozilla.UITour.setTreatmentTag('srch-chg-treatment', 'firstrun_otherDefault');
                     Mozilla.UITour.setTreatmentTag('srch-chg-action', 'ViewPage');
-                    window.dataLayer.push({
-                        event: 'search-change-interaction',
-                        searchEngine: 'otherDefault'
-                    });
                 }
             });
         }

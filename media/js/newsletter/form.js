@@ -82,12 +82,11 @@ $(function () {
             e.stopImmediatePropagation();
             $self.off('submit');
             newsletter = getNewsletterName($self);
-
+            //KEEP FOR IMPLEMENTATION
             if (newsletter !== '') {
                 window.dataLayer.push({
-                    event: 'mozorg-newsletter',
-                    interaction: 'submit',
-                    newsletterName: newsletter
+                    event: 'newsletter-signup-success',
+                    newsletter: newsletter
                 });
             }
 
@@ -152,8 +151,12 @@ $(function () {
                 $thanks.show();
 
                 // track signup in GA
+
                 var newsletter = getNewsletterName($self);
-                window.dataLayer.push({event: 'newsletter-interaction', browserAction: 'submit', newsletter: newsletter});
+                window.dataLayer.push({
+                    event: 'newsletter-signup-success',
+                    newsletter: newsletter
+                });
 
             } else if (data.errors) {
                 for (var i = 0; i < data.errors.length; i++) {

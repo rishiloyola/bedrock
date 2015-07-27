@@ -112,12 +112,6 @@
         }
     }
 
-    //GA Custom Dimension in Pageview
-    window.dataLayer.push({
-        event: 'set-state',
-        state: state
-    });
-
     // conditions in which scene2 should not be shown, even when the
     // #download-fx hash is set
     noScene2 = (
@@ -182,6 +176,7 @@
                 // beginning download. Otherwise, animation can be choppy and
                 // possibly not finish.
                 window.setTimeout(function() {
+
                     window.dataLayer.push({
                         event: 'virtual-pageview',
                         virtualUrl: virtualUrl

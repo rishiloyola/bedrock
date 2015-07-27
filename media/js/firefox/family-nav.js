@@ -54,6 +54,7 @@ if (typeof window.Mozilla === 'undefined') {
                 $tertiaryNavContainer.toggleClass('active');
 
                 // track when opening menu
+
                 if ($tertiaryNavTrigger.hasClass('active')) {
                     window.dataLayer.push({
                         event: 'family-nav-interaction',
@@ -120,6 +121,13 @@ if (typeof window.Mozilla === 'undefined') {
                 }
             }
         };
+
+        $tertiaryNavs.on('click', 'a', function() {
+            dataLayer.push({
+                event: 'family-nav-interaction',
+                browserAction: $(this).text()
+            });
+        });
 
         // public interface
         return {
