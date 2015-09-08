@@ -1,0 +1,39 @@
+{# This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/. -#}
+
+{% extends "teach/smarton/base.html" %}
+
+{% block page_title %}{{_('Get smart on...')}}{% endblock %}
+{% block page_desc %}{{_('Get smart on...')}}{% endblock %}
+{% block body_id %}smarton-landing{% endblock %}
+{% block body_class %}smarton landing{% endblock %}
+
+{% block smarton_content %}
+<main role="main" class="section">
+  <div class="content">
+
+    <ul class="smarton-topics">
+      <li class="topic-security">
+        <a href="{{ url('teach.smarton.security') }}">
+          <h2 class="topic-title">{{ _('Cybersecurity') }}</h2>
+          <p>{{ _('Look both ways, stay updated, and make sure your passwords are as buff as you are.') }}</p>
+        </a>
+      </li>
+      <li class="topic-surveillance">
+        <a href="{{ url('teach.smarton.surveillance') }}">
+          <h2 class="topic-title">{{ _('Government surveillance') }}</h2>
+          <p>{{ _('Decide where you think the line should be – and keep others from crossing it.') }}</p>
+        </a>
+      </li>
+    </ul>
+
+    <div class="feature">
+      <h3>{{ _('Smarter by the step') }}</h3>
+      <p>Ask &gt; Learn &gt; Act &gt; Discuss</p>
+      <p>{{ _('Ask yourself what you think, find out what you don’t know, and own your experience. Then blast your knowledge to friends.') }}</p>
+    </div>
+
+  </div>
+</main>
+{% endblock %}
