@@ -54,15 +54,33 @@ describe('tracking-protection-tour.js', function() {
 
     describe('init', function() {
 
-        it('shoud show the first tour step', function() {
+        beforeEach(function() {
             spyOn(Mozilla.TPTour, 'getStrings');
             spyOn(Mozilla.TPTour, 'bindEvents');
+        });
+
+        it('shoud show the first tour step', function() {
+            spyOn(Mozilla.TPTour, 'getParameterByName').and.callFake(function() {
+                return 'none';
+            });
             spyOn(Mozilla.TPTour, 'step1');
             Mozilla.TPTour.init();
             expect(Mozilla.TPTour.getStrings).toHaveBeenCalled();
             expect(Mozilla.TPTour.bindEvents).toHaveBeenCalled();
             clock.tick(600);
             expect(Mozilla.TPTour.step1).toHaveBeenCalled();
+        });
+
+        it('shoud show the third tour step when needed', function() {
+            spyOn(Mozilla.TPTour, 'getParameterByName').and.callFake(function() {
+                return '3';
+            });
+            spyOn(Mozilla.TPTour, 'step3');
+            Mozilla.TPTour.init();
+            expect(Mozilla.TPTour.getStrings).toHaveBeenCalled();
+            expect(Mozilla.TPTour.bindEvents).toHaveBeenCalled();
+            clock.tick(600);
+            expect(Mozilla.TPTour.step3).toHaveBeenCalled();
         });
     });
 
@@ -131,6 +149,7 @@ describe('tracking-protection-tour.js', function() {
                 });
             });
             spyOn(Mozilla.UITour, 'showInfo');
+            spyOn(Mozilla.TPTour, 'replaceURLState');
             Mozilla.TPTour.step3();
             expect(Mozilla.UITour.showMenu).toHaveBeenCalledWith('controlCenter', jasmine.any(Function));
             expect(Mozilla.UITour.getConfiguration).toHaveBeenCalledWith('availableTargets', jasmine.any(Function));
@@ -146,6 +165,7 @@ describe('tracking-protection-tour.js', function() {
                 }
             );
 
+            expect(Mozilla.TPTour.replaceURLState).toHaveBeenCalledWith('3');
             expect(Mozilla.TPTour.state).toEqual('step3');
         });
 
@@ -156,6 +176,7 @@ describe('tracking-protection-tour.js', function() {
                 });
             });
             spyOn(Mozilla.UITour, 'showInfo');
+            spyOn(Mozilla.TPTour, 'replaceURLState');
             Mozilla.TPTour.step3();
             expect(Mozilla.UITour.showMenu).toHaveBeenCalledWith('controlCenter', jasmine.any(Function));
             expect(Mozilla.UITour.getConfiguration).toHaveBeenCalledWith('availableTargets', jasmine.any(Function));
@@ -171,6 +192,7 @@ describe('tracking-protection-tour.js', function() {
                 }
             );
 
+            expect(Mozilla.TPTour.replaceURLState).toHaveBeenCalledWith('3');
             expect(Mozilla.TPTour.state).toEqual('step3');
         });
     });
@@ -184,6 +206,15 @@ describe('tracking-protection-tour.js', function() {
             expect(Mozilla.TPTour.hidePanels).toHaveBeenCalled();
             expect($.fn.one).toHaveBeenCalledWith('animationend', Mozilla.TPTour.showEndState);
             expect(Mozilla.TPTour.state).toEqual('step4');
+        });
+    });
+
+    describe('showEndState', function() {
+
+        it('shoud update state correctly', function() {
+            spyOn(Mozilla.TPTour, 'replaceURLState');
+            Mozilla.TPTour.showEndState();
+            expect(Mozilla.TPTour.replaceURLState).toHaveBeenCalledWith('done');
         });
     });
 
@@ -293,6 +324,51 @@ describe('tracking-protection-tour.js', function() {
             expect(Mozilla.TPTour.hideStep2Panel).toHaveBeenCalled();
             expect(Mozilla.TPTour.showTourStep).toHaveBeenCalled();
             expect(Mozilla.TPTour.state).toEqual('step1');
+        });
+    });
+
+    describe('getParameterByName', function () {
+
+        it('should return the supplied parameter value', function() {
+            var url = '/start/?step=3';
+            var result = Mozilla.TPTour.getParameterByName('step', url);
+            expect(result).toEqual('3');
+        });
+
+        it('should return "none" if parameter is omitted', function() {
+            var url = '/start/';
+            var result = Mozilla.TPTour.getParameterByName('step', url);
+            expect(result).toEqual('none');
+        });
+    });
+
+    describe('replaceURLState', function() {
+
+        it('should update URL with query param if not present', function() {
+            spyOn(Mozilla.TPTour, 'getParameterByName').and.callFake(function() {
+                return 'none';
+            });
+            spyOn(window.history, 'replaceState');
+            Mozilla.TPTour.replaceURLState('3', '/start/');
+            expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/start/?step=3');
+        });
+
+        it('should not change URL if supplied parameter value is already present', function() {
+            spyOn(Mozilla.TPTour, 'getParameterByName').and.callFake(function() {
+                return '3';
+            });
+            spyOn(window.history, 'replaceState');
+            Mozilla.TPTour.replaceURLState('3', '/start/?step=3');
+            expect(window.history.replaceState).not.toHaveBeenCalled();
+        });
+
+        it('should update query parameter with the value supplied', function() {
+            spyOn(Mozilla.TPTour, 'getParameterByName').and.callFake(function() {
+                return 'done';
+            });
+            spyOn(window.history, 'replaceState');
+            Mozilla.TPTour.replaceURLState('3', '/start/?step=done');
+            expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/start/?step=3');
         });
     });
 });

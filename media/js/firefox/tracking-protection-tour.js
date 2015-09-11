@@ -81,12 +81,17 @@ if (typeof Mozilla === 'undefined') {
             Mozilla.UITour.getConfiguration('availableTargets', function(config) {
                 if (config.targets.indexOf('controlCenter-trackingUnblock') !== -1) {
                     Mozilla.UITour.showInfo('controlCenter-trackingUnblock', _step3.titleText, _step3.panelText, undefined, buttons, options);
+                    // fade out content if user has landed on step 3 after page reload.
+                    if (!_$tracker.hasClass('fade-out')) {
+                        _$tracker.addClass('fade-out');
+                    }
                 } else if (config.targets.indexOf('controlCenter-trackingBlock') !== -1) {
                     Mozilla.UITour.showInfo('controlCenter-trackingBlock', _step3.titleText, _step3.panelTextAlt, undefined, buttons, options);
                 }
             });
         });
 
+        TPTour.replaceURLState('3');
         TPTour.state = 'step3';
     };
 
@@ -100,6 +105,7 @@ if (typeof Mozilla === 'undefined') {
     TPTour.showEndState = function() {
         _$dummyContent.addClass('hidden');
         _$endContent.removeClass('hidden');
+        TPTour.replaceURLState('done');
     };
 
     TPTour.hideStep2Panel = function() {
@@ -204,11 +210,56 @@ if (typeof Mozilla === 'undefined') {
         TPTour.showTourStep();
     };
 
+    /**
+     * Gets the value for a given URL parameter name.
+     * @param {string} name - URL parameter name.
+     * @param {string} paramString - optional value used for testing.
+     * @returns value for the given parameter or 'none'.
+     */
+    TPTour.getParameterByName = function(name, paramString) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var params = paramString || location.search;
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(params);
+        return results === null ? 'none' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+    /*
+     * Sets 'step' URL param using replaceState
+     * @param {currentValue} string to be replaced.
+     * @param {newValue} string for new value.
+     * @param {url} optional string for testing pruposes.
+    */
+    TPTour.replaceURLState = function(newValue, url) {
+        var href = url !== undefined ? url : window.location.href;
+        var currentValue = TPTour.getParameterByName('step');
+        var currentParam;
+
+        if (!newValue || newValue === currentValue) {
+            return;
+        }
+
+        if (href.indexOf('step=') !== -1) {
+            currentParam = 'step=' + currentValue;
+            href = href.replace(currentParam, 'step=' + newValue);
+        } else {
+            href = href + '?step=' + newValue;
+        }
+
+        window.history.replaceState({}, '', href);
+    };
+
     TPTour.init = function() {
         TPTour.getStrings();
         TPTour.bindEvents();
+
         // TODO - Once Bug 988151 is fixed we can poll for target visibility instead of use a timeout.
-        setTimeout(TPTour.step1, 500);
+        if (TPTour.getParameterByName('step') === '3') {
+            setTimeout(TPTour.step3, 500);
+        } else {
+            setTimeout(TPTour.step1, 500);
+        }
+
     };
 
     window.Mozilla.TPTour = TPTour;
